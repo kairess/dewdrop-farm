@@ -89,7 +89,7 @@ const onTool = (aTool) => () => {
 
 const onScreen = (aScreen) => () => {
   screen = aScreen;
-  farm.activeSlot = 0;
+  farm.activeRow = 0;
 
   Renderer.invalidate(farm, tool, screen);
 };
@@ -111,19 +111,19 @@ const onActivePlot = (dir) => () => {
     }
   } else if (screen === 'buy') {
     if (dir === 'up') {
-      if (farm.activeSlot <= 0) return;
-      farm.activeSlot--;
+      if (farm.activeRow <= 0) return;
+      farm.activeRow--;
     } else if (dir === 'down') {
-      if (farm.activeSlot >= Farm.store(farm).length - 1) return;
-      farm.activeSlot++;
+      if (farm.activeRow >= Farm.store(farm).length - 1) return;
+      farm.activeRow++;
     }
   } else if (screen === 'sell') {
     if (dir === 'up') {
-      if (farm.activeSlot <= 0) return;
-      farm.activeSlot--;
+      if (farm.activeRow <= 0) return;
+      farm.activeRow--;
     } else if (dir === 'down') {
-      if (farm.activeSlot >= Farm.market(farm).length - 1) return;
-      farm.activeSlot++;
+      if (farm.activeRow >= Farm.market(farm).length - 1) return;
+      farm.activeRow++;
     }
   }
 }
@@ -198,8 +198,8 @@ const onKeyDown = ({isComposing, keyCode}) => {
           tool: 'buy',
           row: 0,
           col: 0,
-          crop: Farm.store(farm)[farm.activeSlot].type,
-          seed: Farm.store(farm)[farm.activeSlot].seed,
+          crop: Farm.store(farm)[farm.activeRow].type,
+          seed: Farm.store(farm)[farm.activeRow].seed,
         }
 
         farm = Rules.dispatch(farm, action);
@@ -210,14 +210,14 @@ const onKeyDown = ({isComposing, keyCode}) => {
           tool: 'sell',
           row: 0,
           col: 0,
-          crop: Farm.market(farm)[farm.activeSlot].type,
-          seed: Farm.market(farm)[farm.activeSlot].seed,
+          crop: Farm.market(farm)[farm.activeRow].type,
+          seed: Farm.market(farm)[farm.activeRow].seed,
         }
 
         farm = Rules.dispatch(farm, action);
 
-        if (Farm.market(farm).length <= farm.activeSlot) {
-          farm.activeSlot = Farm.market(farm).length - 1;
+        if (Farm.market(farm).length <= farm.activeRow) {
+          farm.activeRow = Farm.market(farm).length - 1;
         }
       }
 

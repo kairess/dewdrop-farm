@@ -272,7 +272,7 @@ const renderStore = (farm) => {
   let html = '';
 
   Farm.store(farm).forEach((item, index) => {
-    let isActive = (index === farm.activeSlot ? true : false);
+    let isActive = (index === farm.activeRow ? true : false);
     html += renderStoreRow(item, isActive);
   });
 
@@ -287,7 +287,7 @@ const renderMarket = (farm) => {
   let html = '';
 
   Farm.market(farm).forEach((item, index) => {
-    let isActive = (index === farm.activeSlot ? true : false);
+    let isActive = (index === farm.activeRow ? true : false);
     html += renderStoreRow(item, isActive);
   });
 
