@@ -128,6 +128,13 @@ a:visited {
   align-self: center;
   user-select: none;
   touch-action: manipulation;
+
+  .plot.active {
+    border-top: 0.2rem solid rgb(180, 32, 42);
+    border-right: 0.2rem solid rgb(115, 23, 45);
+    border-bottom: 0.2rem solid rgb(115, 23, 45);
+    border-left: 0.2rem solid rgb(180, 32, 42);
+  }
 }
 
 .plot {

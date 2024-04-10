@@ -93,6 +93,22 @@ const onScreen = (aScreen) => () => {
   Renderer.invalidate(farm, tool, screen);
 };
 
+const onActivePlot = (dir) => () => {
+  if (dir === 'up') {
+    if (farm.activePlot.row <= 0) return;
+    farm.activePlot.row--;
+  } else if (dir === 'down') {
+    if (farm.activePlot.row >= farm.rows - 1) return;
+    farm.activePlot.row++;
+  } else if (dir === 'left') {
+    if (farm.activePlot.col <= 0) return;
+    farm.activePlot.col--;
+  } else if (dir === 'right') {
+    if (farm.activePlot.col >= farm.cols - 1) return;
+    farm.activePlot.col++;
+  }
+}
+
 const onUpdate = (dt) => {
   const action = {
     tool: 'update',
@@ -120,9 +136,16 @@ const onKeyDown = ({isComposing, keyCode}) => {
     const screenKeys = {
       70: 'tend',
       66: 'buy',
-      83: 'sell',
+      // 83: 'sell', // TODO: duplicated key
       73: 'geek',
     };
+
+    const moveKeys = {
+      87: 'up',
+      83: 'down',
+      65: 'left',
+      68: 'right',
+    }
 
     if (toolKeys[keyCode]) {
       onTool(toolKeys[keyCode])();
@@ -130,6 +153,25 @@ const onKeyDown = ({isComposing, keyCode}) => {
 
     if (screenKeys[keyCode]) {
       onScreen(screenKeys[keyCode])();
+    }
+
+    if (moveKeys[keyCode]) {
+      onActivePlot(moveKeys[keyCode])();
+    }
+
+    if (keyCode === 32) {
+      const row = farm.activePlot.row;
+      const col = farm.activePlot.col;
+
+      const action = {
+        tool,
+        row,
+        col,
+        slot,
+      };
+
+      farm = Rules.dispatch(farm, action);
+      Renderer.invalidate(farm, tool, screen);
     }
   }
 };

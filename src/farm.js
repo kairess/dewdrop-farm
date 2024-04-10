@@ -7,7 +7,7 @@ const MIN_CROP_STAGE = 1;
 const MAX_CROP_STAGE = 5;
 const DEAD_CROP_STAGE = -1;
 const MAX_INVENTORY_SIZE = 4;
-const MAX_STACK_SIZE = 16;
+const MAX_STACK_SIZE = 99;
 
 const LEVELS = [100, 380, 770, 1300, 2150, 3300, 4800, 6900, 10000, 15000];
 const SEASONS = ['spring', 'summer', 'fall', 'winter'];
@@ -754,6 +754,7 @@ Farm.create = (options = {}) => {
     xp: 0,
     cow: false,
     food: 0,
+    activePlot: {row: 0, col: 0},
   };
 
   const farm = {

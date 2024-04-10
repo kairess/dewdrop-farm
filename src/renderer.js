@@ -223,7 +223,12 @@ const renderFarmPlotBunny = (farm, row, col) => {
 const renderFarmPlot = (farm, row, col) => {
   let html = '';
 
-  html += `<div class="tile plot" data-crop="${row}${col}">`;
+  if (farm.activePlot.row === row && farm.activePlot.col === col) {
+    html += `<div class="tile plot active" data-crop="${row}${col}">`;
+  } else {
+    html += `<div class="tile plot" data-crop="${row}${col}">`;
+  }
+
   html += renderFarmPlotGround(farm, row, col);
   html += renderFarmPlotFertilizer(farm, row, col);
   html += renderFarmPlotCrop(farm, row, col);
