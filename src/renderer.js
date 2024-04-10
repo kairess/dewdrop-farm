@@ -117,9 +117,10 @@ const renderStoreItem = (item) => {
   return html;
 };
 
-const renderStoreCash = ({type, seed, cash, disabled}) => {
+const renderStoreCash = ({type, seed, cash, disabled}, isActive) => {
   let html = '';
-  const klasses = ['register', disabled ? 'disabled' : ''];
+
+  const klasses = ['register', disabled ? 'disabled' : '', isActive ? 'active' : ''];
 
   html += '<span class="col center">';
   html += `<span class="${renderClasses(klasses)}" data-crop="${type}" data-seed="${seed}">`;
@@ -130,12 +131,12 @@ const renderStoreCash = ({type, seed, cash, disabled}) => {
   return html;
 };
 
-const renderStoreRow = (item) => {
+const renderStoreRow = (item, isActive) => {
   let html = '';
 
   html += '<div class="row slot item">';
   html += renderStoreItem(item);
-  html += renderStoreCash(item);
+  html += renderStoreCash(item, isActive);
   html += '</div>';
 
   return html;
@@ -270,8 +271,9 @@ const renderNotFound = (type) => {
 const renderStore = (farm) => {
   let html = '';
 
-  Farm.store(farm).forEach((item) => {
-    html += renderStoreRow(item);
+  Farm.store(farm).forEach((item, index) => {
+    let isActive = (index === farm.activeSlot ? true : false);
+    html += renderStoreRow(item, isActive);
   });
 
   if (!html) {
@@ -284,8 +286,9 @@ const renderStore = (farm) => {
 const renderMarket = (farm) => {
   let html = '';
 
-  Farm.market(farm).forEach((item) => {
-    html += renderStoreRow(item);
+  Farm.market(farm).forEach((item, index) => {
+    let isActive = (index === farm.activeSlot ? true : false);
+    html += renderStoreRow(item, isActive);
   });
 
   if (!html) {

@@ -322,6 +322,17 @@ $itemDetailBackground: rgb(219, 164, 99);
     margin: 0.1rem;
   }
 
+  > .slot .register.active {
+    border-top: 0.3rem solid rgb(180, 32, 42);
+    border-right: 0.3rem solid rgb(115, 23, 45);
+    border-bottom: 0.3rem solid rgb(115, 23, 45);
+    border-left: 0.3rem solid rgb(180, 32, 42);
+  }
+
+  > .slot {
+    margin: 0.1rem;
+  }
+
   > .item {
     justify-content: space-between;
 

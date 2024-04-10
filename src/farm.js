@@ -755,6 +755,7 @@ Farm.create = (options = {}) => {
     cow: false,
     food: 0,
     activePlot: {row: 0, col: 0},
+    activeSlot: 0,
   };
 
   const farm = {

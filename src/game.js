@@ -89,23 +89,42 @@ const onTool = (aTool) => () => {
 
 const onScreen = (aScreen) => () => {
   screen = aScreen;
+  farm.activeSlot = 0;
 
   Renderer.invalidate(farm, tool, screen);
 };
 
 const onActivePlot = (dir) => () => {
-  if (dir === 'up') {
-    if (farm.activePlot.row <= 0) return;
-    farm.activePlot.row--;
-  } else if (dir === 'down') {
-    if (farm.activePlot.row >= farm.rows - 1) return;
-    farm.activePlot.row++;
-  } else if (dir === 'left') {
-    if (farm.activePlot.col <= 0) return;
-    farm.activePlot.col--;
-  } else if (dir === 'right') {
-    if (farm.activePlot.col >= farm.cols - 1) return;
-    farm.activePlot.col++;
+  if (screen === 'tend') {
+    if (dir === 'up') {
+      if (farm.activePlot.row <= 0) return;
+      farm.activePlot.row--;
+    } else if (dir === 'down') {
+      if (farm.activePlot.row >= farm.rows - 1) return;
+      farm.activePlot.row++;
+    } else if (dir === 'left') {
+      if (farm.activePlot.col <= 0) return;
+      farm.activePlot.col--;
+    } else if (dir === 'right') {
+      if (farm.activePlot.col >= farm.cols - 1) return;
+      farm.activePlot.col++;
+    }
+  } else if (screen === 'buy') {
+    if (dir === 'up') {
+      if (farm.activeSlot <= 0) return;
+      farm.activeSlot--;
+    } else if (dir === 'down') {
+      if (farm.activeSlot >= Farm.store(farm).length - 1) return;
+      farm.activeSlot++;
+    }
+  } else if (screen === 'sell') {
+    if (dir === 'up') {
+      if (farm.activeSlot <= 0) return;
+      farm.activeSlot--;
+    } else if (dir === 'down') {
+      if (farm.activeSlot >= Farm.market(farm).length - 1) return;
+      farm.activeSlot++;
+    }
   }
 }
 
@@ -134,17 +153,17 @@ const onKeyDown = ({isComposing, keyCode}) => {
     };
 
     const screenKeys = {
-      70: 'tend',
-      66: 'buy',
-      // 83: 'sell', // TODO: duplicated key
-      73: 'geek',
+      74: 'tend', // J
+      75: 'buy',  // K
+      76: 'sell', // L
+      186: 'geek', // ;
     };
 
     const moveKeys = {
-      87: 'up',
-      83: 'down',
-      65: 'left',
-      68: 'right',
+      87: 'up',    // W
+      83: 'down',  // S
+      65: 'left',  // A
+      68: 'right', // D
     }
 
     if (toolKeys[keyCode]) {
@@ -159,18 +178,49 @@ const onKeyDown = ({isComposing, keyCode}) => {
       onActivePlot(moveKeys[keyCode])();
     }
 
-    if (keyCode === 32) {
-      const row = farm.activePlot.row;
-      const col = farm.activePlot.col;
+    if (keyCode === 32) { // Space
+      if (screen === 'tend') {
+        const row = farm.activePlot.row;
+        const col = farm.activePlot.col;
 
-      const action = {
-        tool,
-        row,
-        col,
-        slot,
-      };
+        const action = {
+          tool,
+          row,
+          col,
+          slot,
+        };
 
-      farm = Rules.dispatch(farm, action);
+        farm = Rules.dispatch(farm, action);
+      } else if (screen === 'buy') {
+        if (Farm.store(farm).length <= 0) return;
+
+        const action = {
+          tool: 'buy',
+          row: 0,
+          col: 0,
+          crop: Farm.store(farm)[farm.activeSlot].type,
+          seed: Farm.store(farm)[farm.activeSlot].seed,
+        }
+
+        farm = Rules.dispatch(farm, action);
+      } else if (screen === 'sell') {
+        if (Farm.market(farm).length <= 0) return;
+
+        const action = {
+          tool: 'sell',
+          row: 0,
+          col: 0,
+          crop: Farm.market(farm)[farm.activeSlot].type,
+          seed: Farm.market(farm)[farm.activeSlot].seed,
+        }
+
+        farm = Rules.dispatch(farm, action);
+
+        if (Farm.market(farm).length <= farm.activeSlot) {
+          farm.activeSlot = Farm.market(farm).length - 1;
+        }
+      }
+
       Renderer.invalidate(farm, tool, screen);
     }
   }
