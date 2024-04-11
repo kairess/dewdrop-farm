@@ -756,6 +756,7 @@ Farm.create = (options = {}) => {
     food: 0,
     activePlot: {row: 0, col: 0},
     activeRow: 0,
+    isTriggeredSpace: false,
   };
 
   const farm = {

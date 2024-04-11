@@ -57,7 +57,7 @@ a:visited {
 }
 
 .magic {
-  transition: background 22.5s linear;
+  transition: background 11.25s linear;
 }
 
 .spring {
@@ -327,6 +327,11 @@ $itemDetailBackground: rgb(219, 164, 99);
     border-right: 0.3rem solid rgb(115, 23, 45);
     border-bottom: 0.3rem solid rgb(115, 23, 45);
     border-left: 0.3rem solid rgb(180, 32, 42);
+  }
+
+  > .slot .register.active.triggered {
+    transform: translate(0.1rem, 0.1rem);
+    box-shadow: 0 0 rgba(20, 16, 19, 0.5), 0 0 rgba(74, 84, 98, 0.5);
   }
 
   > .slot {

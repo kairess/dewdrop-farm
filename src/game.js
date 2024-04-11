@@ -203,6 +203,11 @@ const onKeyDown = ({isComposing, keyCode}) => {
         }
 
         farm = Rules.dispatch(farm, action);
+
+        farm.isTriggeredSpace = true;
+        setTimeout(() => {
+          farm.isTriggeredSpace = false;
+        }, 100);
       } else if (screen === 'sell') {
         if (Farm.market(farm).length <= 0) return;
 
@@ -218,6 +223,11 @@ const onKeyDown = ({isComposing, keyCode}) => {
 
         if (Farm.market(farm).length <= farm.activeRow) {
           farm.activeRow = Farm.market(farm).length - 1;
+        } else {
+          farm.isTriggeredSpace = true;
+          setTimeout(() => {
+            farm.isTriggeredSpace = false;
+          }, 100);
         }
       }
 

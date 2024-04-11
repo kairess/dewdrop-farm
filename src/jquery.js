@@ -6,9 +6,10 @@ function Fn(selector) {
   this.element = selector;
 
   if (typeof selector === 'string') {
-    if (selector.indexOf('#') === 0) {
-      this.element = document.getElementById(selector.slice(1));
-    }
+    // if (selector.indexOf('#') === 0) {
+    //   this.element = document.getElementById(selector.slice(1));
+    // }
+    this.element = document.querySelector(selector);
   }
 
   return this;
@@ -101,6 +102,11 @@ Fn.prototype.click = function click(start, move, end) {
 
   return this;
 };
+
+Fn.prototype.css = function (prop, val) {
+  this.element.style[prop] = val;
+  return this
+}
 
 function root(selector) {
   return new Fn(selector);
