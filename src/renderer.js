@@ -85,7 +85,7 @@ const renderInventoryItem = (item) => {
   return html;
 };
 
-const renderStoreItem = (item) => {
+const renderStoreItem = (item, amount) => {
   const info = Crops.info(item.type);
   const name = item.seed ? `${info.type} ${info.seed}` : info.type;
 
@@ -96,10 +96,10 @@ const renderStoreItem = (item) => {
   if (item.seed) {
     html += '<span class="tile seeds"></span>';
     html += `<span class="tile ${item.type} stage6 crop small"></span>`;
-    html += renderSticker(item.amount);
+    html += renderSticker(amount);
   } else {
     html += `<span class="tile ${item.type} stage6 crop"></span>`;
-    html += renderSticker(item.amount);
+    html += renderSticker(amount);
   }
   html += '</div>';
 
@@ -109,6 +109,21 @@ const renderStoreItem = (item) => {
     html += `<span class="unlock"><span class="capitalize">${name}</span> available at Level&nbsp;${item.disabled}</span>`;
   } else {
     html += `<span class="capitalize name">${name}</span>`;
+
+    const seasonIcons = {
+      spring: '🌱',
+      summer: '☀️',
+      fall: '🍂',
+      winter: '❄️'
+    };
+
+    html += `<span class="capitalize unlock">`;
+    info.seasons.forEach(season => {
+        if(seasonIcons[season]) {
+            html += `${seasonIcons[season]}`;
+        }
+    });
+    html += `</span>`;
   }
   html += '</div>';
 
@@ -131,11 +146,11 @@ const renderStoreCash = ({type, seed, cash, disabled}, isActive, isTriggeredSpac
   return html;
 };
 
-const renderStoreRow = (item, isActive, isTriggeredSpace) => {
+const renderStoreRow = (item, isActive, isTriggeredSpace, amount) => {
   let html = '';
 
   html += '<div class="row slot item">';
-  html += renderStoreItem(item);
+  html += renderStoreItem(item, amount);
   html += renderStoreCash(item, isActive, isTriggeredSpace);
   html += '</div>';
 
@@ -273,7 +288,15 @@ const renderStore = (farm) => {
 
   Farm.store(farm).forEach((item, index) => {
     let isActive = (index === farm.activeRow ? true : false);
-    html += renderStoreRow(item, isActive, farm.isTriggeredSpace);
+
+    let amount = 0;
+    farm.inventory.forEach((iitem) => {
+      if (iitem && item.type === iitem.type && item.seed === iitem.seed) {
+        amount = iitem.amount;
+      }
+    });
+
+    html += renderStoreRow(item, isActive, farm.isTriggeredSpace, amount);
   });
 
   if (!html) {
@@ -288,7 +311,15 @@ const renderMarket = (farm) => {
 
   Farm.market(farm).forEach((item, index) => {
     let isActive = (index === farm.activeRow ? true : false);
-    html += renderStoreRow(item, isActive, farm.isTriggeredSpace);
+
+    let amount = 0;
+    farm.inventory.forEach((iitem) => {
+      if (iitem && item.type === iitem.type && item.seed === iitem.seed) {
+        amount = iitem.amount;
+      }
+    });
+
+    html += renderStoreRow(item, isActive, farm.isTriggeredSpace, amount);
   });
 
   if (!html) {

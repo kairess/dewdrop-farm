@@ -10,7 +10,7 @@ $tileHeight: 4.8rem;
 @mixin crop($name, $row) {
   @for $i from 1 through 6 {
     .#{$name}.stage#{$i} {
-      background-position: 0 (($row - (($i - 1) * 6)) * $tileHeight);
+      background-position: -0.25rem (($row - (($i - 1) * 6)) * $tileHeight);
     }
   }
 }
